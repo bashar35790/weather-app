@@ -13,16 +13,15 @@ export interface WeatherDetailsProps {
   sunset: string;
 }
 
- const WeatherDetails = (props: WeatherDetailsProps) => {
-
-const {
-  visability = "25k",
-  humidity = "61%",
-  windSpeed = "7 km/h",
-  airPresser = "1012 hpa",
-  sunrise = "6.20",
-  sunset = "18.48"
-} = props;
+const WeatherDetails = (props: WeatherDetailsProps) => {
+  const {
+    visability = "25k",
+    humidity = "61%",
+    windSpeed = "7 km/h",
+    airPresser = "1012 hpa",
+    sunrise = "6.20",
+    sunset = "18.48",
+  } = props;
 
   return (
     <>
@@ -61,15 +60,13 @@ const {
 };
 
 export interface SingleWeatherDetailsProps {
-    information: string;
-    icon: React.ReactNode;
-    value: string;
+  information: string;
+  icon: React.ReactNode;
+  value: string;
 }
 function SingleWeatherDetails(props: SingleWeatherDetailsProps) {
   return (
-    <div 
-      className="flex flex-col justify-between gap-2 items-center text-xs font-semibold text-black/80"
-    >
+    <div className="flex flex-col justify-between gap-2 items-center text-xs font-semibold text-black/80">
       <p className="whitespace-nowrap">{props.information}</p>
       <div className="text-3xl">{props.icon}</div>
       <p>{props.value}</p>

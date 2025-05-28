@@ -1,6 +1,6 @@
-import { cn } from '@/utils/cn';
-import Image from 'next/image';
-import React from 'react';
+import { cn } from "@/utils/cn";
+import Image from "next/image";
+import React from "react";
 
 interface WeatherIconProps extends React.HTMLProps<HTMLDivElement> {
   iconName: string;

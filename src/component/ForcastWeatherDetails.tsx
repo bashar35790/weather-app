@@ -4,7 +4,6 @@ import WeatherIcon from "./WeatherIcon";
 import WeatherDetails, { WeatherDetailsProps } from "./WeatherDetails";
 import { kelvinToCelsius } from "@/utils/convertKelvinToCelcuous";
 
-
 export interface ForcastWeatherDetails extends WeatherDetailsProps {
   weatherIcon: string;
   date: string;
@@ -16,7 +15,7 @@ export interface ForcastWeatherDetails extends WeatherDetailsProps {
   description: string;
 }
 
- const ForcastWeatherDetails = (props: ForcastWeatherDetails) => {
+const ForcastWeatherDetails = (props: ForcastWeatherDetails) => {
   const {
     weatherIcon = "02d",
     date = "10.09",
@@ -56,4 +55,4 @@ export interface ForcastWeatherDetails extends WeatherDetailsProps {
     </Container>
   );
 };
-export default  ForcastWeatherDetails;
+export default ForcastWeatherDetails;
