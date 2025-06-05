@@ -22,8 +22,8 @@ const ForcastWeatherDetails = (props: ForcastWeatherDetails) => {
     day = "Tusday",
     temp,
     feels_like,
-    temp_min,
-    temp_max,
+    // temp_min,
+    // temp_max,
     description,
   } = props;
 

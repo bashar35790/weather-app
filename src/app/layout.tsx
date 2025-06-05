@@ -6,7 +6,6 @@ import "./globals.css";
 import {
   QueryClient,
   QueryClientProvider,
-  useQuery,
 } from "@tanstack/react-query";
 
 const geistSans = Geist({

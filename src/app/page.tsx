@@ -83,7 +83,7 @@ interface CityInfo {
 // const weatherAPI = https://api.openweathermap.org/data/2.5/forecast?q=pune&appid=df8b8624d659c25e75806e97c2e508e5&cnt=56
 
 const Home = () => {
-  const [place, setPlace] = useAtom(placeAtom);
+  const [place] = useAtom(placeAtom);
   const [isLoading, _] = useAtom(loadingCityAtom);
 
   const { isPending, error, data, refetch } = useQuery<WeatherData>({
