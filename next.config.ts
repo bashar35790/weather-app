@@ -1,18 +1,10 @@
-
 module.exports = {
   images: {
-    remotePatterns:[
+    remotePatterns: [
       {
-        protocol:"https",
-        hostname:"openweathermap.org",
-      }
-    ]
-  }
-};
-const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
+        protocol: "https",
+        hostname: "openweathermap.org",
+      },
+    ],
   },
-}
-
-module.exports = nextConfig
+};

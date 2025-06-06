@@ -6,6 +6,7 @@ interface Props {
   value: string;
   onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
   onSubmit: React.FormEventHandler<HTMLFormElement> | undefined;
+  className?: string;
 }
 
 const SearchBox = (props: Props) => {
@@ -14,7 +15,7 @@ const SearchBox = (props: Props) => {
       onSubmit={props.onSubmit}
       className={cn(
         "flex items-center justify-center relative h-10",
-        props.className
+        props?.className
       )}
     >
       <input
