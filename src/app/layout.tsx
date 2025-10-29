@@ -33,7 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <QueryClientProvider client={queryClient}>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased text-black`}
             data-new-gr-c-s-check-loaded="14.1237.0"
           data-gr-ext-installed=""
         >
