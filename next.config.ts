@@ -8,14 +8,6 @@ const nextConfig = {
       },
     ],
   },
-
-  // 🧩 এই অংশটাই নতুন যোগ হবে
-  eslint: {
-    ignoreDuringBuilds: true, // ✅ ESLint error গুলো build সময় ignore করবে
-  },
-  typescript: {
-    ignoreBuildErrors: true,  // ✅ TypeScript error গুলো build সময় ignore করবে
-  },
 };
 
 export default nextConfig;

@@ -30,7 +30,7 @@ export default function Navbar({ location }: Props) {
     if (value.length >= 3) {
       try {
         const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/find?q=${value}&appid=${API_KEY}`
+          `/api/weather?action=find&q=${value}`
         );
 
         const newSuggestions: string[] = response.data.list.map(
@@ -80,7 +80,7 @@ export default function Navbar({ location }: Props) {
         try {
           setLoadingCity(true);
           const response = await axios.get(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`
+            `/api/weather?action=current&lat=${latitude}&lon=${longitude}`
           );
           setTimeout(() => {
             setPlace(response.data.name);
@@ -95,7 +95,7 @@ export default function Navbar({ location }: Props) {
 
   return (
     <>
-      <nav className="shadow-sm sticky top-0 left-0 z-50 bg-white">
+      <nav className="shadow-sm sticky top-0 left-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
         <div className="h-[80px] w-full flex justify-between items-center max-w-7xl px-3 mx-auto">
           <div className="flex items-center justify-center gap-2">
             <h2 className="text-gray-500 text-3xl">Weather</h2>

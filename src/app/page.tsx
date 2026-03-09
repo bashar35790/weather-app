@@ -6,7 +6,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { format, fromUnixTime, parseISO } from "date-fns";
 import Container from "@/component/Container";
-import { kelvinToCelsius } from "@/utils/convertKelvinToCelcuous";
+import { formatTemp, getTempColorClass, getTempBgClass } from "@/utils/temperatureUtils";
 import WeatherIcon from "@/component/WeatherIcon";
 import getDayOrNightIcon from "../utils/getNightOrDayIcon";
 import WeatherDetails from "@/component/WeatherDetails";
@@ -90,8 +90,8 @@ const Home = () => {
     queryKey: ["repoData"],
 
     queryFn: async () => {
-      const { data } = await axios(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=56`
+      const { data } = await axios.get(
+        `/api/weather?action=forecast&place=${place}`
       );
       return data;
     },
@@ -131,7 +131,7 @@ const Home = () => {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="flex flex-col gap-4 bg-gray-100 max-h-screen">
+    <div className="flex flex-col gap-4 bg-gradient-to-br from-blue-100 to-white min-h-screen text-slate-800">
       <Navbar location={data?.city.name} />
       <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
         {/* today data  */}
@@ -147,24 +147,24 @@ const Home = () => {
                     ({format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")})
                   </p>
                 </h2>
-                <Container className="gap-10 px-6 items-center">
+                <Container className={`gap-10 px-6 items-center shadow-sm border ${getTempBgClass(firstData?.main?.temp ?? 0)}`}>
                   <div className="flex flex-col px-4">
-                    <span className="text-3xl">
-                      {kelvinToCelsius(firstData?.main?.temp ?? 0)}°
+                    <span className={`text-5xl font-bold tracking-tighter ${getTempColorClass(firstData?.main?.temp ?? 0)}`}>
+                      {formatTemp(firstData?.main?.temp ?? 0)}
                     </span>
                     <p className="text-xs space-x-1 whitespace-nowrap">
                       <span>Feels like</span>
-                      <span>
-                        {kelvinToCelsius(firstData?.main?.feels_like ?? 0)} °
+                      <span className="font-semibold text-slate-700">
+                        {formatTemp(firstData?.main?.feels_like ?? 0)}
                       </span>
                     </p>
                     <p className="space-x-2 text-xs">
-                      <span>
-                        {kelvinToCelsius(firstData?.main?.temp_min ?? 0)} °↓{" "}
+                      <span className="font-medium text-slate-500">
+                        {formatTemp(firstData?.main?.temp_min ?? 0)} ↓{" "}
                       </span>
-                      <span>
+                      <span className="font-medium text-slate-500">
                         {" "}
-                        {kelvinToCelsius(firstData?.main?.temp_max ?? 0)} °↑
+                        {formatTemp(firstData?.main?.temp_max ?? 0)} ↑
                       </span>
                     </p>
                   </div>
@@ -185,7 +185,7 @@ const Home = () => {
                               d.dt_txt
                             )}
                           />
-                          <p>{kelvinToCelsius(d?.main?.temp ?? 0)}°</p>
+                          <p className={`font-bold ${getTempColorClass(d?.main?.temp ?? 0)}`}>{formatTemp(d?.main?.temp ?? 0)}</p>
                         </div>
                       );
                     })}
@@ -204,7 +204,7 @@ const Home = () => {
                     )}
                   />
                 </Container>
-                <Container className="bg-yellow-300/80 px-6 gap-4 justify-between overflow-x-auto">
+                <Container className="bg-white/30 backdrop-blur-md px-6 gap-4 justify-between overflow-x-auto shadow-sm">
                   <WeatherDetails
                     visability={metersToKilometers(
                       firstData?.visibility ?? 10000

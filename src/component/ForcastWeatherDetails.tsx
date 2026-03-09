@@ -2,7 +2,7 @@ import React from "react";
 import Container from "./Container";
 import WeatherIcon from "./WeatherIcon";
 import WeatherDetails, { WeatherDetailsProps } from "./WeatherDetails";
-import { kelvinToCelsius } from "@/utils/convertKelvinToCelcuous";
+import { formatTemp, getTempColorClass, getTempBgClass } from "@/utils/temperatureUtils";
 
 export interface ForcastWeatherDetails extends WeatherDetailsProps {
   weatherIcon: string;
@@ -28,22 +28,22 @@ const ForcastWeatherDetails = (props: ForcastWeatherDetails) => {
   } = props;
 
   return (
-    <Container className="gap-4">
+    <Container className={`gap-4 backdrop-blur-md border shadow-sm transition-all hover:shadow-md hover:-translate-y-1 ${getTempBgClass(temp ?? 0)}`}>
       {/* left section  */}
-      <section className="flex gap4 items-center px-4">
+      <section className="flex gap-4 items-center px-4">
         <div className="flex flex-col gap-1 items-center">
           <WeatherIcon iconName={weatherIcon} />
-          <p>{date}</p>
-          <p className="text-sm">{day}</p>
+          <p className="font-semibold text-slate-700">{date}</p>
+          <p className="text-sm text-slate-500">{day}</p>
         </div>
 
-        <div className="flex flex-col px-4">
-          <span className="text-3xl">{kelvinToCelsius(temp ?? 0)}°</span>
-          <p>
-            <span>Feels like</span>
-            <span>{kelvinToCelsius(feels_like ?? 0)}°</span>
+        <div className="flex flex-col px-4 border-r border-white/30">
+          <span className={`text-3xl font-bold ${getTempColorClass(temp ?? 0)}`}>{formatTemp(temp ?? 0)}</span>
+          <p className="text-slate-600 text-sm mt-1">
+            <span>Feels like </span>
+            <span className="font-semibold">{formatTemp(feels_like ?? 0)}</span>
           </p>
-          <p className="capitalize">{description}</p>
+          <p className="capitalize text-slate-500 text-sm">{description}</p>
         </div>
       </section>
 
