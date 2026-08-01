@@ -204,10 +204,10 @@ const Home = () => {
                 </Container>
                 <Container className="bg-white/30 backdrop-blur-md px-6 gap-4 justify-between overflow-x-auto shadow-sm">
                   <WeatherDetails
-                    visability={metersToKilometers(
+                    visibility={metersToKilometers(
                       firstData?.visibility ?? 10000
                     )}
-                    airPresser={`${firstData?.main.pressure} hpa`}
+                    airPressure={`${firstData?.main.pressure} hpa`}
                     windSpeed={metersPerSecondToKilometersPerHour(
                       firstData?.wind.speed ?? 1.64
                     )}
@@ -242,9 +242,7 @@ const Home = () => {
                   day={d ? format(parseISO(d.dt_txt), "EEEE") : "Not found"}
                   feels_like={d?.main.feels_like ?? 0}
                   temp={d?.main?.temp ?? 0}
-                  temp_max={d?.main.temp_max ?? 0}
-                  temp_min={d?.main.temp_min ?? 0}
-                  airPresser={`${d?.main.pressure} hPa `}
+                  airPressure={`${d?.main.pressure} hPa `}
                   humidity={`${d?.main.humidity}% `}
                   sunrise={format(
                     fromUnixTime(data?.city.sunrise ?? 1702517657),
@@ -254,7 +252,7 @@ const Home = () => {
                     fromUnixTime(data?.city.sunset ?? 1702517657),
                     "H:mm"
                   )}
-                  visability={`${metersToKilometers(d?.visibility ?? 10000)} `}
+                  visibility={`${metersToKilometers(d?.visibility ?? 10000)} `}
                   windSpeed={`${metersPerSecondToKilometersPerHour(
                     d?.wind.speed ?? 1.64
                   )} `}

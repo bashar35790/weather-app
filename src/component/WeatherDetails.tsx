@@ -5,20 +5,20 @@ import { LuEye, LuSunrise, LuSunset } from "react-icons/lu";
 import { MdAir } from "react-icons/md";
 
 export interface WeatherDetailsProps {
-  visability: string;
+  visibility: string;
   humidity: string;
   windSpeed: string;
-  airPresser: string;
+  airPressure: string;
   sunrise: string;
   sunset: string;
 }
 
 const WeatherDetails = (props: WeatherDetailsProps) => {
   const {
-    visability = "25k",
+    visibility = "25k",
     humidity = "61%",
     windSpeed = "7 km/h",
-    airPresser = "1012 hpa",
+    airPressure = "1012 hpa",
     sunrise = "6.20",
     sunset = "18.48",
   } = props;
@@ -27,8 +27,8 @@ const WeatherDetails = (props: WeatherDetailsProps) => {
     <>
       <SingleWeatherDetails
         icon={<LuEye />}
-        information="Visability"
-        value={visability}
+        information="Visibility"
+        value={visibility}
       />
       <SingleWeatherDetails
         icon={<FiDroplet />}
@@ -42,8 +42,8 @@ const WeatherDetails = (props: WeatherDetailsProps) => {
       />
       <SingleWeatherDetails
         icon={<ImMeter />}
-        information="Air Presser"
-        value={airPresser}
+        information="Air Pressure"
+        value={airPressure}
       />
       <SingleWeatherDetails
         icon={<LuSunrise />}

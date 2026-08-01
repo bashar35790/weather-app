@@ -10,8 +10,6 @@ export interface ForcastWeatherDetails extends WeatherDetailsProps {
   day: string;
   temp: number;
   feels_like: number;
-  temp_min: number;
-  temp_max: number;
   description: string;
 }
 
@@ -22,8 +20,6 @@ const ForcastWeatherDetails = (props: ForcastWeatherDetails) => {
     day = "Tusday",
     temp,
     feels_like,
-    // temp_min,
-    // temp_max,
     description,
   } = props;
 

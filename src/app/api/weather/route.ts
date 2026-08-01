@@ -64,12 +64,17 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(response.data);
-  } catch (error: any) {
-    console.error("Weather API Route Error:", error.message);
-    if (error.response) {
+  } catch (error: unknown) {
+    console.error(
+      "Weather API Route Error:",
+      error instanceof Error ? error.message : error,
+    );
+    if (axios.isAxiosError(error)) {
+      const message =
+        error.response?.data?.message ?? "Weather API Error";
       return NextResponse.json(
-        { error: error.response.data.message || "Weather API Error" },
-        { status: error.response.status },
+        { error: message },
+        { status: error.response?.status ?? 500 },
       );
     }
     return NextResponse.json(
