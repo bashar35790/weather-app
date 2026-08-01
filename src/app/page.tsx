@@ -13,7 +13,7 @@ import { metersToKilometers } from "@/utils/mitersToKilomiters";
 import { metersPerSecondToKilometersPerHour } from "@/utils/converWindSpeed";
 import ForcastWeatherDetails from "@/component/ForcastWeatherDetails";
 import { useAtom } from "jotai";
-import { placeAtom } from "./atom";
+import { placeAtom, unitAtom } from "./atom";
 
 interface WeatherData {
   cod: string;
@@ -79,6 +79,7 @@ interface CityInfo {
 
 const Home = () => {
   const [place] = useAtom(placeAtom);
+  const [unit] = useAtom(unitAtom);
 
   const { isPending, error, data, refetch } = useQuery<WeatherData>({
     queryKey: ["weather", place],
@@ -112,7 +113,7 @@ const Home = () => {
 
   if (error)
     return (
-      <div className="flex flex-col gap-4 bg-gradient-to-br from-blue-100 to-white min-h-screen text-slate-800">
+      <div className="flex flex-col gap-4 bg-gradient-to-br from-blue-100 to-white min-h-screen text-slate-800 dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
         <Navbar location={data?.city.name} />
         <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
           <ErrorState
@@ -125,7 +126,7 @@ const Home = () => {
     );
 
   return (
-    <div className="flex flex-col gap-4 bg-gradient-to-br from-blue-100 to-white min-h-screen text-slate-800">
+    <div className="flex flex-col gap-4 bg-gradient-to-br from-blue-100 to-white min-h-screen text-slate-800 dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
       <Navbar location={data?.city.name} />
       <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
         {/* today data  */}
@@ -137,7 +138,7 @@ const Home = () => {
           <>
             <section className="space-y-4">
               <div className="space-y-2">
-                <h2 className="flex gap-1 text-2xl items-end">
+                <h2 className="flex gap-1 text-2xl items-end dark:text-white">
                   <p>{format(parseISO(firstData?.dt_txt ?? ""), "EEEE")}</p>
                   <p className="text-lg">
                     ({format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")})
@@ -146,21 +147,21 @@ const Home = () => {
                 <Container className={`flex-col md:flex-row gap-4 sm:gap-10 px-4 sm:px-6 items-center shadow-sm border ${getTempBgClass(firstData?.main?.temp ?? 0)}`}>
                   <div className="flex flex-col px-4">
                     <span className={`text-5xl font-bold tracking-tighter ${getTempColorClass(firstData?.main?.temp ?? 0)}`}>
-                      {formatTemp(firstData?.main?.temp ?? 0)}
+                      {formatTemp(firstData?.main?.temp ?? 0, unit)}
                     </span>
                     <p className="text-xs space-x-1 whitespace-nowrap">
                       <span>Feels like</span>
-                      <span className="font-semibold text-slate-700">
-                        {formatTemp(firstData?.main?.feels_like ?? 0)}
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">
+                        {formatTemp(firstData?.main?.feels_like ?? 0, unit)}
                       </span>
                     </p>
                     <p className="space-x-2 text-xs">
-                      <span className="font-medium text-slate-500">
-                        {formatTemp(firstData?.main?.temp_min ?? 0)} ↓{" "}
+                      <span className="font-medium text-slate-500 dark:text-slate-400">
+                        {formatTemp(firstData?.main?.temp_min ?? 0, unit)} ↓{" "}
                       </span>
-                      <span className="font-medium text-slate-500">
+                      <span className="font-medium text-slate-500 dark:text-slate-400">
                         {" "}
-                        {formatTemp(firstData?.main?.temp_max ?? 0)} ↑
+                        {formatTemp(firstData?.main?.temp_max ?? 0, unit)} ↑
                       </span>
                     </p>
                   </div>
@@ -182,7 +183,7 @@ const Home = () => {
                               timezone
                             )}
                           />
-                          <p className={`font-bold ${getTempColorClass(d?.main?.temp ?? 0)}`}>{formatTemp(d?.main?.temp ?? 0)}</p>
+                          <p className={`font-bold ${getTempColorClass(d?.main?.temp ?? 0)}`}>{formatTemp(d?.main?.temp ?? 0, unit)}</p>
                         </div>
                       );
                     })}
@@ -193,7 +194,9 @@ const Home = () => {
               <div className="flex flex-col md:flex-row gap-4">
                 {/* left site  */}
                 <Container className="w-full md:w-fit justify-center flex-col px-4 items-center">
-                  <p>{firstData?.weather[0].description}</p>
+                  <p className="capitalize dark:text-slate-200">
+                    {firstData?.weather[0].description}
+                  </p>
                   <WeatherIcon
                     iconName={getDayOrNightIcon(
                       firstData?.weather[0].icon ?? "",
@@ -228,7 +231,7 @@ const Home = () => {
 
             {/* 7 days data  */}
             <section className="flex w-full flex-col gap-4  ">
-              <p className="text-2xl">5-Day Forecast</p>
+              <p className="text-2xl dark:text-white">5-Day Forecast</p>
               {firstDataForEachDate.map((d, i) => (
                 <ForcastWeatherDetails
                   key={i}
@@ -242,6 +245,7 @@ const Home = () => {
                   day={d ? format(parseISO(d.dt_txt), "EEEE") : "Not found"}
                   feels_like={d?.main.feels_like ?? 0}
                   temp={d?.main?.temp ?? 0}
+                  unit={unit}
                   airPressure={`${d?.main.pressure} hPa `}
                   humidity={`${d?.main.humidity}% `}
                   sunrise={format(
@@ -274,19 +278,19 @@ const WeatherSkeleton = () => {
       {/* Today Data */}
       <section className="space-y-4 animate-pulse">
         <div className="space-y-2">
-          <div className="h-6 bg-gray-300 rounded w-48" />
-          <div className="flex flex-col md:flex-row gap-10 items-center bg-white px-6 py-4 rounded shadow">
+          <div className="h-6 bg-gray-300 rounded w-48 dark:bg-gray-700" />
+          <div className="flex flex-col md:flex-row gap-10 items-center bg-white px-6 py-4 rounded shadow dark:bg-slate-800">
             <div className="flex flex-col gap-2">
-              <div className="h-8 w-16 bg-gray-300 rounded" />
-              <div className="h-3 w-24 bg-gray-300 rounded" />
-              <div className="h-3 w-24 bg-gray-300 rounded" />
+              <div className="h-8 w-16 bg-gray-300 rounded dark:bg-gray-700" />
+              <div className="h-3 w-24 bg-gray-300 rounded dark:bg-gray-700" />
+              <div className="h-3 w-24 bg-gray-300 rounded dark:bg-gray-700" />
             </div>
             <div className="flex gap-4 overflow-x-auto w-full">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="flex flex-col items-center gap-2">
-                  <div className="h-4 w-12 bg-gray-300 rounded" />
-                  <div className="h-8 w-8 bg-gray-300 rounded-full" />
-                  <div className="h-4 w-10 bg-gray-300 rounded" />
+                  <div className="h-4 w-12 bg-gray-300 rounded dark:bg-gray-700" />
+                  <div className="h-8 w-8 bg-gray-300 rounded-full dark:bg-gray-700" />
+                  <div className="h-4 w-10 bg-gray-300 rounded dark:bg-gray-700" />
                 </div>
               ))}
             </div>
@@ -296,9 +300,9 @@ const WeatherSkeleton = () => {
 
       {/* Description + Details */}
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="bg-white px-4 py-4 rounded shadow flex flex-col items-center gap-2 w-full md:w-32">
-          <div className="h-4 w-20 bg-gray-300 rounded" />
-          <div className="h-10 w-10 bg-gray-300 rounded-full" />
+        <div className="bg-white px-4 py-4 rounded shadow flex flex-col items-center gap-2 w-full md:w-32 dark:bg-slate-800">
+          <div className="h-4 w-20 bg-gray-300 rounded dark:bg-gray-700" />
+          <div className="h-10 w-10 bg-gray-300 rounded-full dark:bg-gray-700" />
         </div>
         <div className="bg-yellow-300/80 px-6 py-4 rounded flex gap-4 w-full overflow-x-auto">
           {[...Array(5)].map((_, i) => (
@@ -316,12 +320,12 @@ const WeatherSkeleton = () => {
         {[...Array(5)].map((_, i) => (
           <div
             key={i}
-            className="flex items-center gap-4 p-4 bg-white rounded shadow"
+            className="flex items-center gap-4 p-4 bg-white rounded shadow dark:bg-slate-800"
           >
-            <div className="h-10 w-10 bg-gray-300 rounded-full" />
+            <div className="h-10 w-10 bg-gray-300 rounded-full dark:bg-gray-700" />
             <div className="flex flex-col gap-1">
-              <div className="h-3 w-32 bg-gray-300 rounded" />
-              <div className="h-3 w-20 bg-gray-300 rounded" />
+              <div className="h-3 w-32 bg-gray-300 rounded dark:bg-gray-700" />
+              <div className="h-3 w-20 bg-gray-300 rounded dark:bg-gray-700" />
             </div>
           </div>
         ))}
@@ -350,10 +354,10 @@ const ErrorState = ({
     <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
       <p className="text-6xl">🌦️</p>
       <div>
-        <p className="text-lg font-semibold text-slate-800">
+        <p className="text-lg font-semibold text-slate-800 dark:text-slate-100">
           Couldn&apos;t load the weather for &quot;{place}&quot;
         </p>
-        <p className="text-sm text-slate-500 mt-1">{message}</p>
+        <p className="text-sm text-slate-500 mt-1 dark:text-slate-400">{message}</p>
       </div>
       <button
         type="button"
@@ -370,10 +374,10 @@ const EmptyState = () => {
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
       <p className="text-6xl">🌤️</p>
-      <p className="text-lg font-semibold text-slate-800">
+      <p className="text-lg font-semibold text-slate-800 dark:text-slate-100">
         No forecast data available yet
       </p>
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-slate-500 dark:text-slate-400">
         Search for a city above to see its weather.
       </p>
     </div>

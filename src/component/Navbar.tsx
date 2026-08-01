@@ -1,10 +1,16 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { MdOutlineLocationOn, MdWbSunny, MdMyLocation } from "react-icons/md";
+import {
+  MdOutlineLocationOn,
+  MdWbSunny,
+  MdMyLocation,
+  MdOutlineDarkMode,
+  MdOutlineLightMode,
+} from "react-icons/md";
 import SearchBox from "./SearchBox";
 import axios from "axios";
-import { placeAtom } from "@/app/atom";
+import { placeAtom, themeAtom, unitAtom, type Theme } from "@/app/atom";
 import { useAtom } from "jotai";
 
 type Props = { location?: string };
@@ -33,6 +39,8 @@ export default function Navbar({ location }: Props) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searching, setSearching] = useState(false);
   const [, setPlace] = useAtom(placeAtom);
+  const [theme, setTheme] = useAtom(themeAtom);
+  const [unit, setUnit] = useAtom(unitAtom);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const pendingSubmitRef = useRef<string | null>(null);
@@ -162,10 +170,12 @@ export default function Navbar({ location }: Props) {
 
   return (
     <>
-      <nav className="shadow-sm sticky top-0 left-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+      <nav className="shadow-sm sticky top-0 left-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 dark:bg-slate-900/80 dark:border-gray-700">
         <div className="h-[80px] w-full flex justify-between items-center max-w-7xl px-3 mx-auto">
           <div className="flex items-center justify-center gap-2">
-            <h2 className="text-gray-500 text-2xl sm:text-3xl">Weather</h2>
+            <h2 className="text-gray-500 text-2xl sm:text-3xl dark:text-gray-400">
+              Weather
+            </h2>
             <MdWbSunny className="text-2xl sm:text-3xl mt-1 text-yellow-300" />
           </div>
           <section className="flex gap-2 items-center min-w-0">
@@ -174,12 +184,43 @@ export default function Navbar({ location }: Props) {
               aria-label="Your Current Location"
               title="Your Current Location"
               onClick={handleCurrentLocation}
-              className="text-xl sm:text-2xl text-gray-400 hover:opacity-80 hover:text-gray-600 cursor-pointer shrink-0"
+              className="text-xl sm:text-2xl text-gray-400 hover:opacity-80 hover:text-gray-600 cursor-pointer shrink-0 dark:text-gray-500 dark:hover:text-gray-300"
             >
               <MdMyLocation />
             </button>
             <MdOutlineLocationOn className="text-2xl sm:text-3xl shrink-0" />
-            <p className="text-slate-900/80 text-sm truncate"> {location} </p>
+            <p className="text-slate-900/80 text-sm truncate dark:text-slate-100">
+              {" "}
+              {location}{" "}
+            </p>
+            <button
+              type="button"
+              onClick={() =>
+                setUnit(unit === "celsius" ? "fahrenheit" : "celsius")
+              }
+              title="Toggle temperature unit"
+              aria-label="Toggle temperature unit"
+              className="shrink-0 text-sm font-semibold text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 cursor-pointer"
+            >
+              {unit === "celsius" ? "°C" : "°F"}
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setTheme(
+                  (theme === "dark" ? "light" : "dark") as Theme,
+                )
+              }
+              title="Toggle dark mode"
+              aria-label="Toggle dark mode"
+              className="shrink-0 text-xl sm:text-2xl text-gray-400 hover:text-gray-600 cursor-pointer dark:text-gray-500 dark:hover:text-gray-300"
+            >
+              {(theme ?? "light") === "dark" ? (
+                <MdOutlineLightMode />
+              ) : (
+                <MdOutlineDarkMode />
+              )}
+            </button>
             <div className="relative hidden md:flex">
               <SearchBox
                 value={city}
@@ -226,7 +267,7 @@ function SuggestionBox({
         <ul
           role="listbox"
           aria-label="Location suggestions"
-          className="mb-4 bg-white absolute border top-[44px] left-0 border-gray-300 rounded-md min-w-[200px] flex flex-col gap-1 py-2 px-2"
+          className="mb-4 bg-white absolute border top-[44px] left-0 border-gray-300 rounded-md min-w-[200px] flex flex-col gap-1 py-2 px-2 dark:bg-slate-800 dark:border-gray-600"
         >
           {error && suggestions.length < 1 && (
             <li className="text-red-500 p-1"> {error} </li>
@@ -237,7 +278,7 @@ function SuggestionBox({
               role="option"
               aria-selected={false}
               onClick={() => handleSuggestionClick(item)}
-              className="cursor-pointer p-1 rounded hover:bg-gray-200"
+              className="cursor-pointer p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-slate-100"
             >
               {suggestionLabel(item)}
             </li>

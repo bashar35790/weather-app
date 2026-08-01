@@ -23,7 +23,7 @@ const SearchBox = (props: Props) => {
         onChange={props.onChange}
         type="text"
         placeholder="Search location..."
-        className="px-4 py-2 w-[230px] border border-gray-300 rounded-l-md focus:outline-hidden focus:border-blue-500 h-full placeholder:text-gray-500"
+        className="px-4 py-2 w-[230px] border border-gray-300 rounded-l-md focus:outline-hidden focus:border-blue-500 h-full placeholder:text-gray-500 dark:border-gray-600 dark:bg-slate-800 dark:text-white dark:placeholder:text-gray-400"
       />
       <button
         type="submit"
