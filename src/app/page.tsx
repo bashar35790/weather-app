@@ -3,11 +3,9 @@
 import Navbar from "@/component/Navbar";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useEffect } from "react";
 import { format, fromUnixTime, parseISO } from "date-fns";
 import Container from "@/component/Container";
-import { formatTemp, getTempColorClass, getTempBgClass } from "@/utils/temperatureUtils";
-import WeatherIcon from "@/component/WeatherIcon";
+import { formatTemp, getTempColorClass, getTempBgClass } from "@/utils/temperatureUtils";import WeatherIcon from "@/component/WeatherIcon";
 import getDayOrNightIcon from "../utils/getNightOrDayIcon";
 import { getCityLocalDate, getCityLocalHour } from "@/utils/cityTime";
 import WeatherDetails from "@/component/WeatherDetails";
@@ -81,22 +79,18 @@ interface CityInfo {
 
 const Home = () => {
   const [place] = useAtom(placeAtom);
-  const [isLoading, _] = useAtom(loadingCityAtom);
+  const [isLoading] = useAtom(loadingCityAtom);
 
   const { isPending, error, data, refetch } = useQuery<WeatherData>({
-    queryKey: ["repoData"],
-
+    queryKey: ["weather", place],
     queryFn: async () => {
       const { data } = await axios.get(
         `/api/weather?action=forecast&place=${place}`
       );
       return data;
     },
+    retry: 1,
   });
-
-  useEffect(() => {
-    refetch();
-  }, [place, refetch]);
 
   const firstData = data?.list[0];
 
@@ -117,22 +111,29 @@ const Home = () => {
     });
   });
 
-  if (isPending)
+  if (error)
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="animate-bounce">Loding...</p>
+      <div className="flex flex-col gap-4 bg-gradient-to-br from-blue-100 to-white min-h-screen text-slate-800">
+        <Navbar location={data?.city.name} />
+        <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
+          <ErrorState
+            place={place}
+            message={getErrorMessage(error)}
+            onRetry={refetch}
+          />
+        </main>
       </div>
     );
-
-  if (error) return "An error has occurred: " + error.message;
 
   return (
     <div className="flex flex-col gap-4 bg-gradient-to-br from-blue-100 to-white min-h-screen text-slate-800">
       <Navbar location={data?.city.name} />
       <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
         {/* today data  */}
-        {isLoading ? (
+        {isPending || isLoading ? (
           <WeatherSkeleton />
+        ) : !firstData ? (
+          <EmptyState />
         ) : (
           <>
             <section className="space-y-4">
@@ -329,5 +330,55 @@ const WeatherSkeleton = () => {
         ))}
       </section>
     </main>
+  );
+};
+
+function getErrorMessage(error: Error): string {
+  const responseError = (
+    error as unknown as { response?: { data?: { error?: string } } }
+  ).response?.data?.error;
+  return responseError ?? error.message;
+}
+
+const ErrorState = ({
+  place,
+  message,
+  onRetry,
+}: {
+  place: string;
+  message: string;
+  onRetry: () => void;
+}) => {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
+      <p className="text-6xl">🌦️</p>
+      <div>
+        <p className="text-lg font-semibold text-slate-800">
+          Couldn&apos;t load the weather for &quot;{place}&quot;
+        </p>
+        <p className="text-sm text-slate-500 mt-1">{message}</p>
+      </div>
+      <button
+        type="button"
+        onClick={onRetry}
+        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+      >
+        Try again
+      </button>
+    </div>
+  );
+};
+
+const EmptyState = () => {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
+      <p className="text-6xl">🌤️</p>
+      <p className="text-lg font-semibold text-slate-800">
+        No forecast data available yet
+      </p>
+      <p className="text-sm text-slate-500">
+        Search for a city above to see its weather.
+      </p>
+    </div>
   );
 };
