@@ -12,6 +12,7 @@ import WeatherDetails from "@/component/WeatherDetails";
 import { metersToKilometers } from "@/utils/mitersToKilomiters";
 import { metersPerSecondToKilometersPerHour } from "@/utils/converWindSpeed";
 import ForcastWeatherDetails from "@/component/ForcastWeatherDetails";
+import Reveal from "@/component/Reveal";
 import { useAtom } from "jotai";
 import { placeAtom, unitAtom } from "./atom";
 
@@ -138,7 +139,8 @@ const Home = () => {
           <EmptyState />
         ) : (
           <>
-            <section className="space-y-4">
+            <Reveal>
+              <section className="space-y-4">
               <div className="space-y-2">
                 <h2 className="flex gap-1 text-2xl items-end font-semibold dark:text-white">
                   <p className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent dark:from-sky-300 dark:to-indigo-300">
@@ -231,9 +233,11 @@ const Home = () => {
                 </Container>
                 {/* right side  */}
               </div>
-            </section>
+              </section>
+              </Reveal>
 
             {/* 7 days data  */}
+            <Reveal delay={100}>
             <section className="flex w-full flex-col gap-4">
               <div className="flex items-center gap-3">
                 <p className="text-2xl font-semibold bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent dark:from-sky-300 dark:to-indigo-300">
@@ -242,8 +246,8 @@ const Home = () => {
                 <span className="h-px flex-1 bg-gradient-to-r from-sky-400/50 to-transparent dark:from-sky-400/30" />
               </div>
               {firstDataForEachDate.map((d, i) => (
+                <Reveal key={i} delay={i * 80}>
                 <ForcastWeatherDetails
-                  key={i}
                   description={d?.weather[0].description ?? ""}
                   weatherIcon={getDayOrNightIcon(
                     d?.weather[0].icon ?? "01d",
@@ -270,8 +274,10 @@ const Home = () => {
                     d?.wind.speed ?? 1.64
                   )} `}
                 />
+                </Reveal>
               ))}
-            </section>
+              </section>
+              </Reveal>
           </>
         )}
       </main>
