@@ -9,6 +9,7 @@ import Container from "@/component/Container";
 import { formatTemp, getTempColorClass, getTempBgClass } from "@/utils/temperatureUtils";
 import WeatherIcon from "@/component/WeatherIcon";
 import getDayOrNightIcon from "../utils/getNightOrDayIcon";
+import { getCityLocalDate, getCityLocalHour } from "@/utils/cityTime";
 import WeatherDetails from "@/component/WeatherDetails";
 import { metersToKilometers } from "@/utils/mitersToKilomiters";
 import { metersPerSecondToKilometersPerHour } from "@/utils/converWindSpeed";
@@ -78,10 +79,6 @@ interface CityInfo {
   sunset: number;
 }
 
-// Example usage:
-// const weatherResponse: WeatherData = await fetchWeatherData();
-// const weatherAPI = https://api.openweathermap.org/data/2.5/forecast?q=pune&appid=df8b8624d659c25e75806e97c2e508e5&cnt=56
-
 const Home = () => {
   const [place] = useAtom(placeAtom);
   const [isLoading, _] = useAtom(loadingCityAtom);
@@ -102,21 +99,20 @@ const Home = () => {
   }, [place, refetch]);
 
   const firstData = data?.list[0];
-  console.log("data", data);
+
+  const timezone = data?.city.timezone ?? 0;
 
   const uniqueDates = [
     ...new Set(
-      data?.list.map(
-        (entry) => new Date(entry.dt * 1000).toISOString().split("T")[0]
-      )
+      data?.list.map((entry) => getCityLocalDate(entry.dt, timezone))
     ),
   ];
 
-  // Filtering data to get the first entry after 6 AM for each unique date
+  // Filtering data to get the first entry after 6 AM (city-local time) for each unique date
   const firstDataForEachDate = uniqueDates.map((date) => {
     return data?.list.find((entry) => {
-      const entryDate = new Date(entry.dt * 1000).toISOString().split("T")[0];
-      const entryTime = new Date(entry.dt * 1000).getHours();
+      const entryDate = getCityLocalDate(entry.dt, timezone);
+      const entryTime = getCityLocalHour(entry.dt, timezone);
       return entryDate === date && entryTime >= 6;
     });
   });
@@ -182,7 +178,8 @@ const Home = () => {
                           <WeatherIcon
                             iconName={getDayOrNightIcon(
                               d?.weather[0].icon,
-                              d.dt_txt
+                              d.dt,
+                              timezone
                             )}
                           />
                           <p className={`font-bold ${getTempColorClass(d?.main?.temp ?? 0)}`}>{formatTemp(d?.main?.temp ?? 0)}</p>
@@ -200,7 +197,8 @@ const Home = () => {
                   <WeatherIcon
                     iconName={getDayOrNightIcon(
                       firstData?.weather[0].icon ?? "",
-                      firstData?.dt_txt ?? ""
+                      firstData?.dt ?? 0,
+                      timezone
                     )}
                   />
                 </Container>
@@ -230,16 +228,20 @@ const Home = () => {
 
             {/* 7 days data  */}
             <section className="flex w-full flex-col gap-4  ">
-              <p className="text-2xl">Forcast (7 days)</p>
+              <p className="text-2xl">5-Day Forecast</p>
               {firstDataForEachDate.map((d, i) => (
                 <ForcastWeatherDetails
                   key={i}
                   description={d?.weather[0].description ?? ""}
-                  weatherIcon={d?.weather[0].icon ?? "01d"}
+                  weatherIcon={getDayOrNightIcon(
+                    d?.weather[0].icon ?? "01d",
+                    d?.dt ?? 0,
+                    timezone
+                  )}
                   date={d ? format(parseISO(d.dt_txt), "dd.MM") : ""}
-                  day={d ? format(parseISO(d.dt_txt), "dd.MM") : "Not found"}
+                  day={d ? format(parseISO(d.dt_txt), "EEEE") : "Not found"}
                   feels_like={d?.main.feels_like ?? 0}
-                  temp={Math.abs(d?.main?.temp ?? 0)}
+                  temp={d?.main?.temp ?? 0}
                   temp_max={d?.main.temp_max ?? 0}
                   temp_min={d?.main.temp_min ?? 0}
                   airPresser={`${d?.main.pressure} hPa `}
