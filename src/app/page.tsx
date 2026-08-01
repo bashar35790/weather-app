@@ -144,7 +144,7 @@ const Home = () => {
                   <p className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent dark:from-sky-300 dark:to-indigo-300">
                     {format(parseISO(firstData?.dt_txt ?? ""), "EEEE")}
                   </p>
-                  <p className="text-lg text-slate-500 dark:text-slate-400">
+                  <p className="text-lg font-medium text-slate-600 dark:text-slate-300">
                     ({format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")})
                   </p>
                 </h2>
@@ -153,17 +153,17 @@ const Home = () => {
                     <span className={`text-5xl font-bold tracking-tighter ${getTempColorClass(firstData?.main?.temp ?? 0)}`}>
                       {formatTemp(firstData?.main?.temp ?? 0, unit)}
                     </span>
-                    <p className="text-xs space-x-1 whitespace-nowrap">
+                    <p className="text-xs space-x-1 whitespace-nowrap text-slate-600 dark:text-slate-400">
                       <span>Feels like</span>
-                      <span className="font-semibold text-slate-700 dark:text-slate-300">
+                      <span className="font-semibold text-slate-900 dark:text-white">
                         {formatTemp(firstData?.main?.feels_like ?? 0, unit)}
                       </span>
                     </p>
                     <p className="space-x-2 text-xs">
-                      <span className="font-medium text-slate-500 dark:text-slate-400">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">
                         {formatTemp(firstData?.main?.temp_min ?? 0, unit)} ↓{" "}
                       </span>
-                      <span className="font-medium text-slate-500 dark:text-slate-400">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">
                         {" "}
                         {formatTemp(firstData?.main?.temp_max ?? 0, unit)} ↑
                       </span>
@@ -198,7 +198,7 @@ const Home = () => {
               <div className="flex flex-col md:flex-row gap-4">
                 {/* left site  */}
                 <Container className="w-full md:w-fit justify-center flex-col px-4 items-center">
-                  <p className="capitalize dark:text-slate-200">
+                  <p className="capitalize font-semibold text-slate-800 dark:text-slate-100">
                     {firstData?.weather[0].description}
                   </p>
                   <WeatherIcon

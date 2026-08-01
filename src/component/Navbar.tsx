@@ -193,7 +193,7 @@ export default function Navbar({ location }: Props) {
                 <MdMyLocation className="text-xl sm:text-2xl" />
               </button>
               <MdOutlineLocationOn className="text-2xl sm:text-3xl shrink-0 text-sky-600/70 dark:text-sky-300/70" />
-              <p className="text-slate-900/80 text-sm font-medium truncate dark:text-slate-100">
+              <p className="text-slate-900 text-sm font-semibold truncate dark:text-white">
                 {location}
               </p>
               <button

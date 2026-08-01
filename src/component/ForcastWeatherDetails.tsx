@@ -37,17 +37,17 @@ const ForcastWeatherDetails = (props: ForcastWeatherDetails) => {
       <section className="relative z-10 flex gap-4 items-center px-4 w-full md:w-fit">
         <div className="flex flex-col gap-1 items-center">
           <WeatherIcon iconName={weatherIcon} />
-          <p className="font-semibold text-slate-700 dark:text-slate-200">{date}</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">{day}</p>
+          <p className="font-semibold text-slate-800 dark:text-slate-100">{date}</p>
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-300">{day}</p>
         </div>
 
         <div className="flex flex-col px-4 md:border-r border-white/40 dark:border-white/10">
           <span className={`text-4xl font-bold tracking-tight ${getTempColorClass(temp ?? 0)}`}>{formatTemp(temp ?? 0, unit)}</span>
-          <p className="text-slate-600 text-sm mt-1 dark:text-slate-400">
+          <p className="text-slate-700 text-sm mt-1 dark:text-slate-300">
             <span>Feels like </span>
-            <span className="font-semibold dark:text-slate-200">{formatTemp(feels_like ?? 0, unit)}</span>
+            <span className="font-semibold text-slate-900 dark:text-white">{formatTemp(feels_like ?? 0, unit)}</span>
           </p>
-          <p className="capitalize text-slate-500 text-sm dark:text-slate-400">{description}</p>
+          <p className="capitalize font-medium text-slate-600 text-sm dark:text-slate-300">{description}</p>
         </div>
       </section>
 
