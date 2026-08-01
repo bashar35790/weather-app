@@ -168,84 +168,98 @@ export default function Navbar({ location }: Props) {
     );
   }
 
+  const iconBtn =
+    "shrink-0 grid place-items-center h-9 w-9 rounded-full bg-white/50 border border-white/60 text-gray-600 shadow-sm backdrop-blur-md transition-colors hover:bg-white/80 cursor-pointer dark:bg-white/10 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/20";
+
   return (
     <>
-      <nav className="shadow-sm sticky top-0 left-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 dark:bg-slate-900/80 dark:border-gray-700">
-        <div className="h-[80px] w-full flex justify-between items-center max-w-7xl px-3 mx-auto">
-          <div className="flex items-center justify-center gap-2">
-            <h2 className="text-gray-500 text-2xl sm:text-3xl dark:text-gray-400">
-              Weather
-            </h2>
-            <MdWbSunny className="text-2xl sm:text-3xl mt-1 text-yellow-300" />
+      <div className="sticky top-0 z-50 px-3 pt-3 pb-2">
+        <nav className="mx-auto max-w-7xl rounded-2xl backdrop-blur-xl bg-white/60 border border-white/60 shadow-lg shadow-sky-200/40 ring-1 ring-inset ring-white/40 dark:bg-slate-900/60 dark:border-white/10 dark:shadow-black/30 dark:ring-white/10">
+          <div className="h-[72px] w-full flex justify-between items-center px-3 sm:px-4">
+            <div className="flex items-center justify-center gap-2">
+              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-sky-300 dark:via-blue-300 dark:to-indigo-300">
+                Weather
+              </h2>
+              <MdWbSunny className="text-2xl sm:text-3xl mt-1 text-amber-400 drop-shadow-sm" />
+            </div>
+            <section className="flex gap-2 items-center min-w-0">
+              <button
+                type="button"
+                aria-label="Your Current Location"
+                title="Your Current Location"
+                onClick={handleCurrentLocation}
+                className={iconBtn}
+              >
+                <MdMyLocation className="text-xl sm:text-2xl" />
+              </button>
+              <MdOutlineLocationOn className="text-2xl sm:text-3xl shrink-0 text-sky-600/70 dark:text-sky-300/70" />
+              <p className="text-slate-900/80 text-sm font-medium truncate dark:text-slate-100">
+                {location}
+              </p>
+              <button
+                type="button"
+                onClick={() =>
+                  setUnit(unit === "celsius" ? "fahrenheit" : "celsius")
+                }
+                title="Toggle temperature unit"
+                aria-label="Toggle temperature unit"
+                className={iconBtn}
+              >
+                <span className="text-sm font-bold">
+                  {unit === "celsius" ? "°C" : "°F"}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setTheme((theme === "dark" ? "light" : "dark") as Theme)
+                }
+                title="Toggle dark mode"
+                aria-label="Toggle dark mode"
+                className={iconBtn}
+              >
+                {(theme ?? "light") === "dark" ? (
+                  <MdOutlineLightMode className="text-xl sm:text-2xl" />
+                ) : (
+                  <MdOutlineDarkMode className="text-xl sm:text-2xl" />
+                )}
+              </button>
+              <div className="relative hidden md:flex">
+                <SearchBox
+                  value={city}
+                  onSubmit={handleSubmitSearch}
+                  onChange={(e) => handleInputChange(e.target.value)}
+                />
+                <SuggestionBox
+                  {...{
+                    showSuggestions,
+                    suggestions,
+                    handleSuggestionClick,
+                    error,
+                  }}
+                />
+              </div>
+            </section>
           </div>
-          <section className="flex gap-2 items-center min-w-0">
-            <button
-              type="button"
-              aria-label="Your Current Location"
-              title="Your Current Location"
-              onClick={handleCurrentLocation}
-              className="text-xl sm:text-2xl text-gray-400 hover:opacity-80 hover:text-gray-600 cursor-pointer shrink-0 dark:text-gray-500 dark:hover:text-gray-300"
-            >
-              <MdMyLocation />
-            </button>
-            <MdOutlineLocationOn className="text-2xl sm:text-3xl shrink-0" />
-            <p className="text-slate-900/80 text-sm truncate dark:text-slate-100">
-              {" "}
-              {location}{" "}
-            </p>
-            <button
-              type="button"
-              onClick={() =>
-                setUnit(unit === "celsius" ? "fahrenheit" : "celsius")
-              }
-              title="Toggle temperature unit"
-              aria-label="Toggle temperature unit"
-              className="shrink-0 text-sm font-semibold text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 cursor-pointer"
-            >
-              {unit === "celsius" ? "°C" : "°F"}
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                setTheme(
-                  (theme === "dark" ? "light" : "dark") as Theme,
-                )
-              }
-              title="Toggle dark mode"
-              aria-label="Toggle dark mode"
-              className="shrink-0 text-xl sm:text-2xl text-gray-400 hover:text-gray-600 cursor-pointer dark:text-gray-500 dark:hover:text-gray-300"
-            >
-              {(theme ?? "light") === "dark" ? (
-                <MdOutlineLightMode />
-              ) : (
-                <MdOutlineDarkMode />
-              )}
-            </button>
-            <div className="relative hidden md:flex">
+          <section className="flex px-3 pb-3 md:hidden">
+            <div className="relative w-full">
               <SearchBox
                 value={city}
                 onSubmit={handleSubmitSearch}
                 onChange={(e) => handleInputChange(e.target.value)}
               />
               <SuggestionBox
-                {...{ showSuggestions, suggestions, handleSuggestionClick, error }}
+                {...{
+                  showSuggestions,
+                  suggestions,
+                  handleSuggestionClick,
+                  error,
+                }}
               />
             </div>
           </section>
-        </div>
-      </nav>
-      <section className="flex max-w-7xl px-3 md:hidden pt-2 pb-3">
-        <div className="relative">
-          <SearchBox
-            value={city}
-            onSubmit={handleSubmitSearch}
-            onChange={(e) => handleInputChange(e.target.value)}
-          />
-          <SuggestionBox
-            {...{ showSuggestions, suggestions, handleSuggestionClick, error }}
-          />
-        </div>
-      </section>
+        </nav>
+      </div>
     </>
   );
 }
@@ -267,7 +281,7 @@ function SuggestionBox({
         <ul
           role="listbox"
           aria-label="Location suggestions"
-          className="mb-4 bg-white absolute border top-[44px] left-0 border-gray-300 rounded-md min-w-[200px] flex flex-col gap-1 py-2 px-2 dark:bg-slate-800 dark:border-gray-600"
+          className="mb-4 absolute top-[44px] left-0 min-w-[200px] flex flex-col gap-1 py-2 px-2 rounded-xl bg-white/70 border border-white/60 shadow-lg backdrop-blur-xl ring-1 ring-inset ring-white/30 dark:bg-slate-900/80 dark:border-white/10 dark:ring-white/10"
         >
           {error && suggestions.length < 1 && (
             <li className="text-red-500 p-1"> {error} </li>
@@ -278,7 +292,7 @@ function SuggestionBox({
               role="option"
               aria-selected={false}
               onClick={() => handleSuggestionClick(item)}
-              className="cursor-pointer p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-slate-100"
+              className="cursor-pointer p-1 rounded-lg hover:bg-sky-50 dark:hover:bg-white/10 dark:text-slate-100"
             >
               {suggestionLabel(item)}
             </li>

@@ -19,8 +19,8 @@ export function getTempColorClass(temp: number): string {
 
 export function getTempBgClass(temp: number): string {
   if (temp < 15)
-    return "bg-blue-50/60 border-blue-200/50 dark:bg-blue-900/40 dark:border-blue-700/40";
+    return "bg-sky-100/40 border-sky-200/60 ring-sky-100/60 dark:bg-sky-500/10 dark:border-sky-400/20 dark:ring-sky-400/10";
   if (temp >= 15 && temp <= 28)
-    return "bg-emerald-50/60 border-emerald-200/50 dark:bg-emerald-900/40 dark:border-emerald-700/40";
-  return "bg-orange-50/60 border-orange-200/50 dark:bg-orange-900/40 dark:border-orange-700/40";
+    return "bg-emerald-100/40 border-emerald-200/60 ring-emerald-100/60 dark:bg-emerald-500/10 dark:border-emerald-400/20 dark:ring-emerald-400/10";
+  return "bg-orange-100/40 border-orange-200/60 ring-orange-100/60 dark:bg-orange-500/10 dark:border-orange-400/20 dark:ring-orange-400/10";
 }

@@ -113,7 +113,8 @@ const Home = () => {
 
   if (error)
     return (
-      <div className="flex flex-col gap-4 bg-gradient-to-br from-blue-100 to-white min-h-screen text-slate-800 dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
+      <div className="relative flex flex-col gap-4 bg-gradient-to-br from-sky-100 via-blue-50 to-purple-100 min-h-screen text-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950 dark:text-slate-100">
+        <BackgroundFX />
         <Navbar location={data?.city.name} />
         <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
           <ErrorState
@@ -126,7 +127,8 @@ const Home = () => {
     );
 
   return (
-    <div className="flex flex-col gap-4 bg-gradient-to-br from-blue-100 to-white min-h-screen text-slate-800 dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
+    <div className="relative flex flex-col gap-4 bg-gradient-to-br from-sky-100 via-blue-50 to-purple-100 min-h-screen text-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950 dark:text-slate-100">
+      <BackgroundFX />
       <Navbar location={data?.city.name} />
       <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
         {/* today data  */}
@@ -138,9 +140,11 @@ const Home = () => {
           <>
             <section className="space-y-4">
               <div className="space-y-2">
-                <h2 className="flex gap-1 text-2xl items-end dark:text-white">
-                  <p>{format(parseISO(firstData?.dt_txt ?? ""), "EEEE")}</p>
-                  <p className="text-lg">
+                <h2 className="flex gap-1 text-2xl items-end font-semibold dark:text-white">
+                  <p className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent dark:from-sky-300 dark:to-indigo-300">
+                    {format(parseISO(firstData?.dt_txt ?? ""), "EEEE")}
+                  </p>
+                  <p className="text-lg text-slate-500 dark:text-slate-400">
                     ({format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")})
                   </p>
                 </h2>
@@ -166,7 +170,7 @@ const Home = () => {
                     </p>
                   </div>
                   {/* time and weather icon  */}
-                  <div className="flex gap-10 sm:gap-16 overflow-x-auto w-full justify-between pr-3 ">
+                  <div className="flex gap-10 sm:gap-16 overflow-x-auto scrollbar-thin w-full justify-between pr-3 ">
                     {data.list.map((d, index) => {
                       return (
                         <div
@@ -205,7 +209,7 @@ const Home = () => {
                     )}
                   />
                 </Container>
-                <Container className="flex-1 bg-white/30 backdrop-blur-md px-6 gap-4 justify-between overflow-x-auto shadow-sm">
+                <Container className="flex-1 px-6 gap-4 justify-between overflow-x-auto scrollbar-thin">
                   <WeatherDetails
                     visibility={metersToKilometers(
                       firstData?.visibility ?? 10000
@@ -230,8 +234,13 @@ const Home = () => {
             </section>
 
             {/* 7 days data  */}
-            <section className="flex w-full flex-col gap-4  ">
-              <p className="text-2xl dark:text-white">5-Day Forecast</p>
+            <section className="flex w-full flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <p className="text-2xl font-semibold bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent dark:from-sky-300 dark:to-indigo-300">
+                  5-Day Forecast
+                </p>
+                <span className="h-px flex-1 bg-gradient-to-r from-sky-400/50 to-transparent dark:from-sky-400/30" />
+              </div>
               {firstDataForEachDate.map((d, i) => (
                 <ForcastWeatherDetails
                   key={i}
@@ -273,59 +282,65 @@ const Home = () => {
 export default Home;
 
 const WeatherSkeleton = () => {
+  const glass =
+    "rounded-2xl bg-white/50 border border-white/60 ring-1 ring-inset ring-white/30 backdrop-blur-xl dark:bg-slate-900/40 dark:border-white/10 dark:ring-white/10";
+  const bar = "rounded-full bg-slate-400/30 dark:bg-slate-300/10";
+
   return (
     <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4 animate-pulse">
       {/* Today Data */}
-      <section className="space-y-4 animate-pulse">
-        <div className="space-y-2">
-          <div className="h-6 bg-gray-300 rounded w-48 dark:bg-gray-700" />
-          <div className="flex flex-col md:flex-row gap-10 items-center bg-white px-6 py-4 rounded shadow dark:bg-slate-800">
-            <div className="flex flex-col gap-2">
-              <div className="h-8 w-16 bg-gray-300 rounded dark:bg-gray-700" />
-              <div className="h-3 w-24 bg-gray-300 rounded dark:bg-gray-700" />
-              <div className="h-3 w-24 bg-gray-300 rounded dark:bg-gray-700" />
-            </div>
-            <div className="flex gap-4 overflow-x-auto w-full">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="flex flex-col items-center gap-2">
-                  <div className="h-4 w-12 bg-gray-300 rounded dark:bg-gray-700" />
-                  <div className="h-8 w-8 bg-gray-300 rounded-full dark:bg-gray-700" />
-                  <div className="h-4 w-10 bg-gray-300 rounded dark:bg-gray-700" />
-                </div>
-              ))}
-            </div>
+      <section className="space-y-4">
+        <div className="h-6 w-48 rounded-full bg-slate-400/30 dark:bg-slate-300/10" />
+        <div
+          className={`${glass} flex flex-col md:flex-row gap-10 items-center px-6 py-4`}
+        >
+          <div className="flex flex-col gap-3">
+            <div className={`h-9 w-20 ${bar}`} />
+            <div className={`h-3 w-24 ${bar}`} />
+            <div className={`h-3 w-24 ${bar}`} />
+          </div>
+          <div className="flex gap-4 overflow-x-auto w-full">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="flex flex-col items-center gap-2">
+                <div className={`h-4 w-12 ${bar}`} />
+                <div className={`h-10 w-10 rounded-full ${bar}`} />
+                <div className={`h-4 w-10 ${bar}`} />
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Description + Details */}
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="bg-white px-4 py-4 rounded shadow flex flex-col items-center gap-2 w-full md:w-32 dark:bg-slate-800">
-          <div className="h-4 w-20 bg-gray-300 rounded dark:bg-gray-700" />
-          <div className="h-10 w-10 bg-gray-300 rounded-full dark:bg-gray-700" />
+        <div
+          className={`${glass} flex flex-col items-center gap-3 w-full md:w-40 px-4`}
+        >
+          <div className={`h-4 w-24 ${bar}`} />
+          <div className={`h-12 w-12 rounded-full ${bar}`} />
         </div>
-        <div className="bg-yellow-300/80 px-6 py-4 rounded flex gap-4 w-full overflow-x-auto">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="flex flex-col gap-2 items-start w-24">
-              <div className="h-3 w-20 bg-gray-300 rounded" />
-              <div className="h-3 w-16 bg-gray-300 rounded" />
+        <div
+          className={`${glass} px-6 flex gap-8 w-full overflow-x-auto items-center justify-between`}
+        >
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="flex flex-col gap-2 items-center w-16">
+              <div className={`h-3 w-16 ${bar}`} />
+              <div className={`h-9 w-9 rounded-full ${bar}`} />
+              <div className={`h-3 w-12 ${bar}`} />
             </div>
           ))}
         </div>
       </div>
 
       {/* 7 Days Forecast */}
-      <section className="flex flex-col gap-4 animate-pulse">
-        <div className="h-6 w-40 bg-gray-300 rounded" />
+      <section className="flex flex-col gap-4">
+        <div className={`h-6 w-40 ${bar}`} />
         {[...Array(5)].map((_, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-4 p-4 bg-white rounded shadow dark:bg-slate-800"
-          >
-            <div className="h-10 w-10 bg-gray-300 rounded-full dark:bg-gray-700" />
+          <div key={i} className={`${glass} flex items-center gap-4 p-4`}>
+            <div className={`h-10 w-10 rounded-full ${bar}`} />
             <div className="flex flex-col gap-1">
-              <div className="h-3 w-32 bg-gray-300 rounded dark:bg-gray-700" />
-              <div className="h-3 w-20 bg-gray-300 rounded dark:bg-gray-700" />
+              <div className={`h-3 w-32 ${bar}`} />
+              <div className={`h-3 w-20 ${bar}`} />
             </div>
           </div>
         ))}
@@ -366,6 +381,16 @@ const ErrorState = ({
       >
         Try again
       </button>
+    </div>
+  );
+};
+
+const BackgroundFX = () => {
+  return (
+    <div aria-hidden className="fixed inset-0 -z-10 overflow-hidden">
+      <div className="absolute -top-32 -left-24 h-[28rem] w-[28rem] rounded-full bg-sky-300/40 blur-3xl animate-blob dark:bg-sky-600/20" />
+      <div className="absolute top-1/4 -right-32 h-[30rem] w-[30rem] rounded-full bg-indigo-300/40 blur-3xl animate-blob [animation-delay:-6s] dark:bg-indigo-600/20" />
+      <div className="absolute bottom-0 left-1/4 h-[26rem] w-[26rem] rounded-full bg-violet-300/30 blur-3xl animate-blob [animation-delay:-12s] dark:bg-violet-600/20" />
     </div>
   );
 };

@@ -32,17 +32,17 @@ const ForcastWeatherDetails = (props: ForcastWeatherDetails) => {
   } = props;
 
   return (
-    <Container className={`flex-col md:flex-row gap-4 backdrop-blur-md border shadow-sm transition-all hover:shadow-md hover:-translate-y-1 ${getTempBgClass(temp ?? 0)}`}>
+    <Container className={`flex-col md:flex-row gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(59,130,246,0.25)] ${getTempBgClass(temp ?? 0)}`}>
       {/* left section  */}
-      <section className="flex gap-4 items-center px-4 w-full md:w-fit">
+      <section className="relative z-10 flex gap-4 items-center px-4 w-full md:w-fit">
         <div className="flex flex-col gap-1 items-center">
           <WeatherIcon iconName={weatherIcon} />
           <p className="font-semibold text-slate-700 dark:text-slate-200">{date}</p>
           <p className="text-sm text-slate-500 dark:text-slate-400">{day}</p>
         </div>
 
-        <div className="flex flex-col px-4 md:border-r border-white/30">
-          <span className={`text-3xl font-bold ${getTempColorClass(temp ?? 0)}`}>{formatTemp(temp ?? 0, unit)}</span>
+        <div className="flex flex-col px-4 md:border-r border-white/40 dark:border-white/10">
+          <span className={`text-4xl font-bold tracking-tight ${getTempColorClass(temp ?? 0)}`}>{formatTemp(temp ?? 0, unit)}</span>
           <p className="text-slate-600 text-sm mt-1 dark:text-slate-400">
             <span>Feels like </span>
             <span className="font-semibold dark:text-slate-200">{formatTemp(feels_like ?? 0, unit)}</span>
@@ -53,7 +53,7 @@ const ForcastWeatherDetails = (props: ForcastWeatherDetails) => {
 
       {/* right section  */}
 
-      <section className="overflow-x-auto flex justify-between gap-4 px-4 w-full pr-10">
+      <section className="relative z-10 overflow-x-auto scrollbar-thin flex justify-between gap-4 px-4 w-full pr-10">
         <WeatherDetails {...rest} />
       </section>
     </Container>
