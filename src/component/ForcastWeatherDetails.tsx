@@ -24,16 +24,16 @@ const ForcastWeatherDetails = (props: ForcastWeatherDetails) => {
   } = props;
 
   return (
-    <Container className={`gap-4 backdrop-blur-md border shadow-sm transition-all hover:shadow-md hover:-translate-y-1 ${getTempBgClass(temp ?? 0)}`}>
+    <Container className={`flex-col md:flex-row gap-4 backdrop-blur-md border shadow-sm transition-all hover:shadow-md hover:-translate-y-1 ${getTempBgClass(temp ?? 0)}`}>
       {/* left section  */}
-      <section className="flex gap-4 items-center px-4">
+      <section className="flex gap-4 items-center px-4 w-full md:w-fit">
         <div className="flex flex-col gap-1 items-center">
           <WeatherIcon iconName={weatherIcon} />
           <p className="font-semibold text-slate-700">{date}</p>
           <p className="text-sm text-slate-500">{day}</p>
         </div>
 
-        <div className="flex flex-col px-4 border-r border-white/30">
+        <div className="flex flex-col px-4 md:border-r border-white/30">
           <span className={`text-3xl font-bold ${getTempColorClass(temp ?? 0)}`}>{formatTemp(temp ?? 0)}</span>
           <p className="text-slate-600 text-sm mt-1">
             <span>Feels like </span>

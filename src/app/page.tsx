@@ -143,7 +143,7 @@ const Home = () => {
                     ({format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")})
                   </p>
                 </h2>
-                <Container className={`gap-10 px-6 items-center shadow-sm border ${getTempBgClass(firstData?.main?.temp ?? 0)}`}>
+                <Container className={`flex-col md:flex-row gap-4 sm:gap-10 px-4 sm:px-6 items-center shadow-sm border ${getTempBgClass(firstData?.main?.temp ?? 0)}`}>
                   <div className="flex flex-col px-4">
                     <span className={`text-5xl font-bold tracking-tighter ${getTempColorClass(firstData?.main?.temp ?? 0)}`}>
                       {formatTemp(firstData?.main?.temp ?? 0)}
@@ -190,9 +190,9 @@ const Home = () => {
                 </Container>
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 {/* left site  */}
-                <Container className="w-fit justify-center flex-col px-4 items-center">
+                <Container className="w-full md:w-fit justify-center flex-col px-4 items-center">
                   <p>{firstData?.weather[0].description}</p>
                   <WeatherIcon
                     iconName={getDayOrNightIcon(
@@ -202,7 +202,7 @@ const Home = () => {
                     )}
                   />
                 </Container>
-                <Container className="bg-white/30 backdrop-blur-md px-6 gap-4 justify-between overflow-x-auto shadow-sm">
+                <Container className="flex-1 bg-white/30 backdrop-blur-md px-6 gap-4 justify-between overflow-x-auto shadow-sm">
                   <WeatherDetails
                     visibility={metersToKilometers(
                       firstData?.visibility ?? 10000
@@ -275,7 +275,7 @@ const WeatherSkeleton = () => {
       <section className="space-y-4 animate-pulse">
         <div className="space-y-2">
           <div className="h-6 bg-gray-300 rounded w-48" />
-          <div className="flex gap-10 items-center bg-white px-6 py-4 rounded shadow">
+          <div className="flex flex-col md:flex-row gap-10 items-center bg-white px-6 py-4 rounded shadow">
             <div className="flex flex-col gap-2">
               <div className="h-8 w-16 bg-gray-300 rounded" />
               <div className="h-3 w-24 bg-gray-300 rounded" />
@@ -295,8 +295,8 @@ const WeatherSkeleton = () => {
       </section>
 
       {/* Description + Details */}
-      <div className="flex gap-4">
-        <div className="bg-white px-4 py-4 rounded shadow flex flex-col items-center gap-2 w-32">
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="bg-white px-4 py-4 rounded shadow flex flex-col items-center gap-2 w-full md:w-32">
           <div className="h-4 w-20 bg-gray-300 rounded" />
           <div className="h-10 w-10 bg-gray-300 rounded-full" />
         </div>
