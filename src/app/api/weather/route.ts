@@ -42,9 +42,9 @@ export async function GET(request: Request) {
       if (!q) throw new Error("Missing 'q' parameter for find");
 
       response = await axios.get(
-        "https://api.openweathermap.org/data/2.5/find",
+        "https://api.openweathermap.org/geo/1.0/direct",
         {
-          params: { q, appid: API_KEY, units: "metric", lang: "en" },
+          params: { q, appid: API_KEY, limit: 5 },
         },
       );
     } else if (action === "current") {

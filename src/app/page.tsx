@@ -13,7 +13,7 @@ import { metersToKilometers } from "@/utils/mitersToKilomiters";
 import { metersPerSecondToKilometersPerHour } from "@/utils/converWindSpeed";
 import ForcastWeatherDetails from "@/component/ForcastWeatherDetails";
 import { useAtom } from "jotai";
-import { loadingCityAtom, placeAtom } from "./atom";
+import { placeAtom } from "./atom";
 
 interface WeatherData {
   cod: string;
@@ -79,7 +79,6 @@ interface CityInfo {
 
 const Home = () => {
   const [place] = useAtom(placeAtom);
-  const [isLoading] = useAtom(loadingCityAtom);
 
   const { isPending, error, data, refetch } = useQuery<WeatherData>({
     queryKey: ["weather", place],
@@ -130,7 +129,7 @@ const Home = () => {
       <Navbar location={data?.city.name} />
       <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
         {/* today data  */}
-        {isPending || isLoading ? (
+        {isPending ? (
           <WeatherSkeleton />
         ) : !firstData ? (
           <EmptyState />
